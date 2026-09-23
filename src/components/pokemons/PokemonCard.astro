@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 interface Props {
   url: string;
   name: string;
@@ -7,38 +8,34 @@ interface Props {
 
 const { name, url, isBig = false } = Astro.props;
 const id = url.split('/').at(-2);
-const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/${ id }.png`
-
---- 
+const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+---
 
 <a
-  href={`/pokemons/${name}`}
-  class:list={[
-    `rounded flex flex-col justify-center items-center p-2`,
-    {
-      border: !isBig,
-    },
+  href={`/pokemon/${id}`}
+  class:list={['rounded', 'flex', 'flex-col', 'justify-center', 'items-center', 'p-2',
+  {
+    border: !isBig,
+  }
   ]}
 >
-<img
+  <img
   transition:name={`${name}-image`}
+  width={isBig ? 104 : 88}
+  height={isBig ? 104 : 88}
   class:list={[
     {
       'w-26 h-26': isBig,
-      'w-16 h-16': !isBig,
-    },
+      'w-22 h-22': !isBig,
+    }
   ]}
-  src={imageSrc}
-  alt={name}
-/>
-
-  
-  <span
-    class:list={[
+  src={imageSrc} alt={name} />
+  <span class:list={
+    [
       'capitalize',
       {
-        'text-4xl text-blue-300': isBig,
-      },
-    ]}>#{id} {name}</span
-  >
+        'text-4xl': isBig,
+      }
+    ]
+  }>#{id } { name}</span>
 </a>

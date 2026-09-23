@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+.btn {
+  @apply bg-blue-500 p-2 text-white rounded-md transition-all inline-block;
+}
+
+.disabled {
+  @apply bg-gray-600 text-gray-400 pointer-events-none;
+}
