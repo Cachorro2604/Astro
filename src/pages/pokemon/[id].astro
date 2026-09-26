@@ -1,14 +1,13 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import type { PokemonListResponse } from '../../interfaces/pokemon-list.response';
+import type { PokemonListResponse } from '@interfaces/pokemon-list.response';
 import MainLayout from '../../layouts/MainLayout.astro';
-import PokemonCard from 'src/components/pokemons/PokemonCard.astro';
-
+import PokemonCard from '../../components/pokemons/PokemonCard.astro';
 
 export const getStaticPaths = (async () => {
   const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
   const { results } = await response.json() as PokemonListResponse;
-3
+
   return results.map(({ name, url }) => {
     const id = url.split('/').at(-2);
 
@@ -30,7 +29,7 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
 <MainLayout title="Algún Pokémon">
 <section class="mt-10 mx-10 flex flex-col justify-center items-center">
 <div>
-<a href="/">Regresar</a>
+<a href="/pokemons/1">Regresar</a>
 <h1 class="text-5xl capitalize">{name}</h1>
 </div>
 

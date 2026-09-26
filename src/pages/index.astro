@@ -6,6 +6,8 @@ import '../styles/global.css';
 
 const title = 'Pokémon Static | Home';
 
+return Astro.redirect('/pokemons/1');
+
 const resp = await fetch('https://pokeapi.co/api/v2/pokemon');
 
 
