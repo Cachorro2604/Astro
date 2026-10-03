@@ -2,6 +2,8 @@
 import type { GetStaticPaths } from 'astro';
 import type { PokemonListResponse } from '@interfaces/pokemon-list.response';
 
+import Title from '@components/shared/Title.astro';
+
 import PokemonCard from '../../components/pokemons/PokemonCard.astro';
 import MainLayout from '../../layouts/MainLayout.astro';
 
@@ -15,8 +17,8 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
-const { name } = Astro.params;
-const { url } = Astro.props;
+
+const { name, url } = Astro.props;
 
 const id = url.split('/').at(-2);
 const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
@@ -31,10 +33,17 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
 >
   <section class="mt-10 mx-10 flex flex-col justify-center items-center">
     <div>
-      <a href="/pokemons/1" style="color: #3b82f6; text-decoration: underline;">
-        Regresar
-      </a>
-      <h1 class="text-5xl capitalize">{name}</h1>
+      {/* 
+  <a href="/pokemons/1" class="text-blue-500 hover:underline">
+    Regresar
+  </a> 
+*/}
+
+<button
+ onclick="window.history.back()"
+class="text-blue-500">Regresar</button>
+
+      <Title><span class="capitalize">{name}</span></Title>
     </div>
 
     <PokemonCard name={name} url={url} isBig />

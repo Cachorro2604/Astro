@@ -5,11 +5,53 @@ const links = [
   { href: '/favorites', text: 'Favoritos' },
 ];
 
-const { pathname } = Astro.url;
-const isActive = (href: string) =>
-  href === '/' ? pathname === '/' : pathname.startsWith(href.replace(/\/\d+$/, ''));
+const currentPath = Astro.url.pathname;
 ---
 
+<nav class="shadow bg-slate-900">
+  <div class="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
+    {
+      links.map(({ href, text }) => (
+        <div>
+          <a
+            href={href}
+            class="text-gray-200 mx-4"
+          >
+            {text}
+          </a>
+
+          {currentPath === href ? (
+            <div
+              transition:name="menu-line"
+              class="border-b-2 border-blue-500 mx-4"
+            />
+          ) : (
+            <div class="border-b-2 border-transparent" />
+          )}
+        </div>
+      ))
+    }
+  </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/*
 <nav class="shadow bg-slate-900">
   <div class="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
     {
@@ -27,3 +69,4 @@ const isActive = (href: string) =>
     }
   </div>
 </nav>
+*/}

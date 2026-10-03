@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from 'astro:transitions';
 interface Props {
   url: string;
   name: string;
@@ -13,29 +12,23 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
 
 <a
   href={`/pokemon/${id}`}
-  class:list={['rounded', 'flex', 'flex-col', 'justify-center', 'items-center', 'p-2',
-  {
-    border: !isBig,
-  }
+  class:list={[
+    'rounded',
+    'flex',
+    'flex-col',
+    'justify-center',
+    'items-center',
+    'p-2',
+    { border: !isBig },
   ]}
 >
   <img
-  transition:name={`${name}-image`}
-  width={isBig ? 104 : 88}
-  height={isBig ? 104 : 88}
-  class:list={[
-    {
-      'w-26 h-26': isBig,
-      'w-22 h-22': !isBig,
-    }
-  ]}
-  src={imageSrc} alt={name} />
-  <span class:list={
-    [
-      'capitalize',
-      {
-        'text-4xl': isBig,
-      }
-    ]
-  }>#{id } { name}</span>
+    transition:name={`${name}-image`}
+    width={isBig ? 104 : 88}
+    height={isBig ? 104 : 88}
+    class:list={[{ 'w-26 h-26': isBig, 'w-22 h-22': !isBig }]}
+    src={imageSrc}
+    alt={name}
+  />
+  <span class:list={['capitalize', { 'text-4xl': isBig }]}>#{id} {name}</span>
 </a>
