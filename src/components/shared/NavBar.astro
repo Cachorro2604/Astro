@@ -1,0 +1,29 @@
+---
+const links = [
+  { href: '/', text: 'Listado' },
+  { href: '/pokemons/1', text: 'Paginado' },
+  { href: '/favorites', text: 'Favoritos' },
+];
+
+const { pathname } = Astro.url;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href.replace(/\/\d+$/, ''));
+---
+
+<nav class="shadow bg-slate-900">
+  <div class="container flex items-center justify-center p-6 mx-auto text-gray-600 capitalize dark:text-gray-300">
+    {
+      links.map(({ href, text }) => (
+        <a
+          href={href}
+          class:list={[
+            'text-gray-200 border-b-2 mx-1.5 sm:mx-6',
+            isActive(href) ? 'border-blue-500' : 'border-transparent',
+          ]}
+        >
+          {text}
+        </a>
+      ))
+    }
+  </div>
+</nav>
