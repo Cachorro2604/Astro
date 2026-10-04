@@ -19,7 +19,6 @@ export const getStaticPaths = (async () => {
   }));
 }) satisfies GetStaticPaths;
 
-
 const { name, url } = Astro.props;
 
 const id = url.split('/').at(-2);
@@ -35,22 +34,17 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
   <section class="mt-10 mx-10 flex flex-col justify-center items-center">
     <div class="flex flex-row">
       <div>
-        <!-- <a href="/">Regresar</a> -->
         <button onclick="history.back()" class="text-blue-500">Regresar</button>
-        <Title>{name}</Title>
+        <Title><span class="capitalize">{name}</span></Title>
       </div>
 
-      <button id="btn-favorite" class="ml-4">
+      <button id="btn-favorite" class="ml-4" data-name={name} data-id={id}>
         <Icon name="heart-outline" size={50} />
         <Icon class="hidden" name="heart-full" size={50} />
       </button>
     </div>
 
-
-
-
     <PokemonCard name={name} url={url} isBig />
-
 
     <audio controls class="mt-5">
       <source src={audioSrc} type="audio/ogg" />
@@ -60,16 +54,28 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
 </MainLayout>
 
 
-<style>
+<script>
+  interface FavoritePokemon {
+    name: string;
+    id: number;
+  }
 
+  const btnFavorite = document.querySelector(
+    '#btn-favorite'
+  ) as HTMLButtonElement;
+
+  btnFavorite.addEventListener('click', () => {
+    const name = btnFavorite.dataset.name;
+    const id = btnFavorite.dataset.id;
+
+    console.log({ name, id });
+  });
+</script>
+
+<style>
   @reference "../../styles/global.css";
 
   #btn-favorite {
-    @apply text-red-500;
-  }
-
-
-  #btn-favorite {
-    @apply hover:animate-pulse;
+    @apply text-red-500 hover:animate-pulse;
   }
 </style>
