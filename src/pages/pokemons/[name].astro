@@ -77,6 +77,8 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
     const name = btnFavorite.dataset.name ?? '';
     const id = Number(btnFavorite.dataset.id ?? '');
 
+    let isFavorite = favoritePokemons.some((pokemon) => pokemon.id === id);
+
     const heartOutline = btnFavorite.querySelector(
       '[data-outline]'
     ) as HTMLElement;
@@ -85,16 +87,13 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
       '[data-full]'
     ) as HTMLElement;
 
-    const isFavorite = () =>
-      favoritePokemons.some((pokemon) => pokemon.id === id);
-
-    const renderHeart = () => {
-      heartOutline.classList.toggle('hidden', isFavorite());
-      heartFull.classList.toggle('hidden', !isFavorite());
-    };
+    if (isFavorite) {
+      heartOutline.classList.add('hidden');
+      heartFull.classList.remove('hidden');
+    }
 
     const toggleFavorite = () => {
-      if (isFavorite()) {
+      if (isFavorite) {
         favoritePokemons = favoritePokemons.filter(
           (pokemon) => pokemon.id !== id
         );
@@ -102,19 +101,22 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
         favoritePokemons.push({ id, name });
       }
 
+      isFavorite = !isFavorite;
       localStorage.setItem('favorites', JSON.stringify(favoritePokemons));
     };
 
-    renderHeart();
-
     btnFavorite.onclick = () => {
       toggleFavorite();
-      renderHeart();
+      heartOutline.classList.toggle('hidden');
+      heartFull.classList.toggle('hidden');
     };
   };
 
   document.addEventListener('astro:page-load', handlePageLoad);
 </script>
+
+
+
 
 <style>
   @reference "../../styles/global.css";
