@@ -35,8 +35,8 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
       </div>
 
       <button id="btn-favorite" class="ml-4" data-name={name} data-id={id}>
-        <Icon name="heart-outline" size={50} />
-        <Icon class="hidden" name="heart-full" size={50} />
+        <Icon data-outline name="heart-outline" size={50} />
+        <Icon data-full class="hidden" name="heart-full" size={50} />
       </button>
     </div>
 
@@ -49,55 +49,63 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
   </section>
 </MainLayout>
 
-
 <script>
   interface FavoritePokemon {
     name: string;
     id: number;
   }
 
+  const handlePageLoad = () => {
+    let favoritePokemons: FavoritePokemon[] = JSON.parse(
+      localStorage.getItem('favorites') ?? '[]'
+    );
 
-/*document.addEventListener('astro:before-preparation', () => {
-  console.log('astro:before-preparation');
-});
+    const btnFavorite = document.querySelector(
+      '#btn-favorite'
+    ) as HTMLButtonElement;
 
-document.addEventListener('astro:after-preparation', () => {
-  console.log('astro:after-preparation');
-});
+    if (!btnFavorite) return;
 
-document.addEventListener('astro:before-swap', () => {
-  console.log('astro:before-swap');
-});
+    const name = btnFavorite.dataset.name ?? '';
+    const id = Number(btnFavorite.dataset.id ?? '');
 
-document.addEventListener('astro:after-swap', () => {
-  console.log('astro:after-swap');
-});
+    const heartOutline = btnFavorite.querySelector(
+      '[data-outline]'
+    ) as HTMLElement;
 
-document.addEventListener('astro:page-load', () => {
-  console.log('hola');
-});*/
+    const heartFull = btnFavorite.querySelector(
+      '[data-full]'
+    ) as HTMLElement;
 
+    const isFavorite = () =>
+      favoritePokemons.some((pokemon) => pokemon.id === id);
 
-const handlePageLoad = () => {
-  const btnFavorite = document.querySelector(
-    '#btn-favorite'
-  ) as HTMLButtonElement;
+    const renderHeart = () => {
+      heartOutline.classList.toggle('hidden', isFavorite());
+      heartFull.classList.toggle('hidden', !isFavorite());
+    };
 
-  if (!btnFavorite) return;
+    const toggleFavorite = () => {
+      if (isFavorite()) {
+        favoritePokemons = favoritePokemons.filter(
+          (pokemon) => pokemon.id !== id
+        );
+      } else {
+        favoritePokemons.push({ id, name });
+      }
 
-  const name = btnFavorite.dataset.name;
-  const id = btnFavorite.dataset.id;
+      localStorage.setItem('favorites', JSON.stringify(favoritePokemons));
+    };
 
-  btnFavorite.addEventListener('click', () => {
-    console.log({ name, id });
-  });
-};
+    renderHeart();
 
-document.addEventListener('astro:page-load', handlePageLoad);
-  
-  
+    btnFavorite.onclick = () => {
+      toggleFavorite();
+      renderHeart();
+    };
+  };
 
-
+  document.addEventListener('astro:page-load', handlePageLoad);
 </script>
 
 <style>

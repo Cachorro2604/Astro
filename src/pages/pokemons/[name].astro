@@ -1,4 +1,7 @@
 ---
+
+import { ClientRouter } from 'astro:transitions';
+
 import type { GetStaticPaths } from 'astro';
 import type { PokemonListResponse } from '@interfaces/pokemon-list.response';
 
@@ -39,8 +42,8 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
       </div>
 
       <button id="btn-favorite" class="ml-4" data-name={name} data-id={id}>
-        <Icon name="heart-outline" size={50} />
-        <Icon class="hidden" name="heart-full" size={50} />
+        <Icon data-outline name="heart-outline" size={50} />
+        <Icon data-full class="hidden" name="heart-full" size={50} />
       </button>
     </div>
 
@@ -60,16 +63,57 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
     id: number;
   }
 
-  const btnFavorite = document.querySelector(
-    '#btn-favorite'
-  ) as HTMLButtonElement;
+  const handlePageLoad = () => {
+    let favoritePokemons: FavoritePokemon[] = JSON.parse(
+      localStorage.getItem('favorites') ?? '[]'
+    );
 
-  btnFavorite.addEventListener('click', () => {
-    const name = btnFavorite.dataset.name;
-    const id = btnFavorite.dataset.id;
+    const btnFavorite = document.querySelector(
+      '#btn-favorite'
+    ) as HTMLButtonElement;
 
-    console.log({ name, id });
-  });
+    if (!btnFavorite) return;
+
+    const name = btnFavorite.dataset.name ?? '';
+    const id = Number(btnFavorite.dataset.id ?? '');
+
+    const heartOutline = btnFavorite.querySelector(
+      '[data-outline]'
+    ) as HTMLElement;
+
+    const heartFull = btnFavorite.querySelector(
+      '[data-full]'
+    ) as HTMLElement;
+
+    const isFavorite = () =>
+      favoritePokemons.some((pokemon) => pokemon.id === id);
+
+    const renderHeart = () => {
+      heartOutline.classList.toggle('hidden', isFavorite());
+      heartFull.classList.toggle('hidden', !isFavorite());
+    };
+
+    const toggleFavorite = () => {
+      if (isFavorite()) {
+        favoritePokemons = favoritePokemons.filter(
+          (pokemon) => pokemon.id !== id
+        );
+      } else {
+        favoritePokemons.push({ id, name });
+      }
+
+      localStorage.setItem('favorites', JSON.stringify(favoritePokemons));
+    };
+
+    renderHeart();
+
+    btnFavorite.onclick = () => {
+      toggleFavorite();
+      renderHeart();
+    };
+  };
+
+  document.addEventListener('astro:page-load', handlePageLoad);
 </script>
 
 <style>
@@ -79,3 +123,7 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
     @apply text-red-500 hover:animate-pulse;
   }
 </style>
+
+<head>
+  <ClientRouter />
+</head>
